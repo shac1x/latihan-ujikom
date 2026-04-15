@@ -1,7 +1,7 @@
 @layout('layouts/main')
 
 @section('content')
-    <h4 class="mb-3">Tambah Penjualan Baru</h4>
+    <h4 class="fw-bold mb-4">Tambah Data Penjualan</h4>
 
     <form id="formPenjualan" action="/penjualan/store" method="POST">
         <div class="row mb-3">
@@ -19,11 +19,11 @@
             </div>
         </div>
 
-        <div class="row mb-3">
+        <div class="row mb-4">
             <div class="col-md-3">
                 <label class="form-label fw-bold">Perusahaan</label>
                 <select name="id_perusahaan" id="selPerusahaan" class="form-select" required>
-                    <option value="">-- Pilih Perusahaan --</option>
+                    <option value="">Pilih Perusahaan</option>
                     @each(p in perusahaans)
                     <option value="{{ p.id_perusahaan }}" data-tax="{{ p.tax }}">{{ p.nama_perusahaan }}</option>
                     @endeach
@@ -32,7 +32,7 @@
             <div class="col-md-3">
                 <label class="form-label fw-bold">Customer</label>
                 <select name="id_customer" class="form-select" required>
-                    <option value="">-- Pilih Customer --</option>
+                    <option value="">Pilih Customer</option>
                     @each(c in customers)
                     <option value="{{ c.id_customer }}">{{ c.nama_customer }}</option>
                     @endeach
@@ -41,9 +41,9 @@
             <div class="col-md-3">
                 <label class="form-label fw-bold">Metode Bayar</label>
                 <select name="metode_bayar" class="form-select">
-                    <option value="Tunai">Tunai</option>
-                    <option value="Kredit">Kredit</option>
-                    <option value="Transfer">Transfer</option>
+                    <option value="TUNAI">TUNAI</option>
+                    <option value="KREDIT">KREDIT</option>
+                    <option value="TRANSFER">TRANSFER</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -52,56 +52,38 @@
             </div>
         </div>
 
-        <hr>
-        <h5>Daftar Barang</h5>
-
         <table class="table table-bordered" id="tblItems">
-            <thead class="table-dark">
+            <thead class="table-light">
                 <tr>
                     <th>Produk</th>
-                    <th width="100" class="text-center">Qty</th>
-                    <th width="150" class="text-end">Harga</th>
-                    <th width="150" class="text-end">Subtotal</th>
-                    <th width="50" class="text-center">Aksi</th>
+                    <th width="120" class="text-center">Qty</th>
+                    <th width="180" class="text-end">Harga</th>
+                    <th width="180" class="text-end">Subtotal</th>
+                    <th width="80" class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody id="itemsBody">
-                <tr id="emptyRow">
-                    <td colspan="5" class="text-center text-muted py-3">Klik tombol "Tambah Barang" untuk menambahkan item</td>
-                </tr>
+                <tr id="emptyRow"><td colspan="5" class="text-center text-muted">Belum ada barang</td></tr>
             </tbody>
         </table>
 
-        <button type="button" class="btn btn-success btn-sm mb-4" onclick="addItem()">+ Tambah Barang</button>
+        <button type="button" class="btn btn-outline-success btn-sm mb-4" onclick="addItem()">Tambah Barang</button>
 
         <div class="row">
             <div class="col-md-5 offset-md-7">
-                <table class="table table-sm">
-                    <tr>
-                        <td class="fw-bold">Subtotal</td>
-                        <td class="text-end" id="subtotalDisplay">Rp 0</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">PPN (<span id="taxRateDisplay">0</span>%)</td>
-                        <td class="text-end" id="ppnDisplay">Rp 0</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">DP / Diskon</td>
-                        <td><input type="number" name="dp" class="form-control form-control-sm text-end" value="0" min="0" onchange="calculate()" onkeyup="calculate()"></td>
-                    </tr>
-                    <tr class="table-primary">
-                        <td class="fw-bold fs-5">Grand Total</td>
-                        <td class="text-end fw-bold fs-5" id="grandTotalDisplay">Rp 0</td>
-                    </tr>
+                <table class="table table-borderless table-sm">
+                    <tr><td class="fw-bold">Subtotal</td><td class="text-end" id="subtotalDisplay">Rp 0</td></tr>
+                    <tr><td class="fw-bold">PPN (<span id="taxRateDisplay">0</span>%)</td><td class="text-end" id="ppnDisplay">Rp 0</td></tr>
+                    <tr><td class="fw-bold">Diskon / DP</td><td><input type="number" name="dp" class="form-control text-end" value="0" min="0" onchange="calculate()" onkeyup="calculate()"></td></tr>
+                    <tr class="border-top"><td class="fw-bold fs-5">Grand Total</td><td class="text-end fw-bold fs-5 text-primary" id="grandTotalDisplay">Rp 0</td></tr>
                 </table>
             </div>
         </div>
 
         <input type="hidden" name="items" id="hiddenItems">
-
-        <div class="mt-3">
-            <button type="submit" class="btn btn-primary">💾 Simpan Faktur</button>
+        <div class="mt-4 border-top pt-3 text-end">
             <a href="/penjualan" class="btn btn-secondary">Batal</a>
+            <button type="submit" class="btn btn-primary">Simpan Faktur</button>
         </div>
     </form>
 
@@ -109,9 +91,7 @@
         const produks = {{{ JSON.stringify(produks) }}};
         let items = [];
 
-        function fmt(n) {
-            return 'Rp ' + Number(n).toLocaleString('id-ID');
-        }
+        function fmt(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
 
         function addItem() {
             document.getElementById('emptyRow')?.remove();
@@ -124,7 +104,7 @@
             renderItems();
             calculate();
             if (items.length === 0) {
-                document.getElementById('itemsBody').innerHTML = '<tr id="emptyRow"><td colspan="5" class="text-center text-muted py-3">Klik tombol "Tambah Barang" untuk menambahkan item</td></tr>';
+                document.getElementById('itemsBody').innerHTML = '<tr id="emptyRow"><td colspan="5" class="text-center text-muted">Belum ada barang</td></tr>';
             }
         }
 
@@ -132,30 +112,18 @@
             const tbody = document.getElementById('itemsBody');
             tbody.innerHTML = '';
             items.forEach((item, i) => {
-                const opts = produks.map(p =>
-                    '<option value="' + p.id_produk + '" ' + (p.id_produk == item.id_produk ? 'selected' : '') + '>' + p.nama_produk + ' (Stok: ' + p.stock + ')</option>'
-                ).join('');
+                const opts = produks.map(p => '<option value="' + p.id_produk + '" ' + (p.id_produk == item.id_produk ? 'selected' : '') + '>' + p.nama_produk + ' (Stok: ' + p.stock + ')</option>').join('');
                 const subtotal = item.qty * item.price;
                 const tr = document.createElement('tr');
-                tr.innerHTML =
-                    '<td><select class="form-select form-select-sm" onchange="selectProduk(' + i + ', this.value)"><option value="">-- Pilih Produk --</option>' + opts + '</select></td>' +
-                    '<td><input type="number" class="form-control form-control-sm text-center" value="' + item.qty + '" min="1" onchange="updateQty(' + i + ', this.value)" onkeyup="updateQty(' + i + ', this.value)"></td>' +
-                    '<td class="text-end align-middle">' + fmt(item.price) + '</td>' +
-                    '<td class="text-end align-middle fw-bold">' + fmt(subtotal) + '</td>' +
-                    '<td class="text-center"><button type="button" class="btn btn-danger btn-sm" onclick="removeItem(' + i + ')">×</button></td>';
+                tr.innerHTML = '<td><select class="form-select" onchange="selectProduk(' + i + ', this.value)"><option value="">Pilih Produk</option>' + opts + '</select></td><td><input type="number" class="form-control text-center" value="' + item.qty + '" min="1" onchange="updateQty(' + i + ', this.value)" onkeyup="updateQty(' + i + ', this.value)"></td><td class="text-end align-middle">' + fmt(item.price) + '</td><td class="text-end align-middle fw-bold">' + fmt(subtotal) + '</td><td class="text-center"><button type="button" class="btn btn-danger btn-sm" onclick="removeItem(' + i + ')">Hapus</button></td>';
                 tbody.appendChild(tr);
             });
         }
 
         function selectProduk(index, id) {
             const p = produks.find(pr => pr.id_produk == id);
-            if (p) {
-                items[index].id_produk = p.id_produk;
-                items[index].price = parseFloat(p.price);
-            } else {
-                items[index].id_produk = '';
-                items[index].price = 0;
-            }
+            if (p) { items[index].id_produk = p.id_produk; items[index].price = parseFloat(p.price); }
+            else { items[index].id_produk = ''; items[index].price = 0; }
             renderItems();
             calculate();
         }
@@ -169,14 +137,12 @@
         function calculate() {
             let subtotal = 0;
             items.forEach(item => subtotal += item.qty * item.price);
-
             const sel = document.getElementById('selPerusahaan');
             const option = sel.options[sel.selectedIndex];
             const taxRate = parseFloat(option?.dataset?.tax || 0);
             const ppn = subtotal * (taxRate / 100);
             const dp = parseFloat(document.querySelector('input[name="dp"]').value) || 0;
             const grandTotal = subtotal + ppn - dp;
-
             document.getElementById('subtotalDisplay').textContent = fmt(subtotal);
             document.getElementById('taxRateDisplay').textContent = taxRate;
             document.getElementById('ppnDisplay').textContent = fmt(ppn);
@@ -187,11 +153,7 @@
 
         document.getElementById('formPenjualan').addEventListener('submit', function(e) {
             const validItems = items.filter(i => i.id_produk);
-            if (validItems.length === 0) {
-                e.preventDefault();
-                alert('Tambahkan minimal 1 barang yang valid!');
-                return;
-            }
+            if (validItems.length === 0) { e.preventDefault(); alert('Pilih minimal 1 produk!'); return; }
             document.getElementById('hiddenItems').value = JSON.stringify(validItems);
         });
     </script>

@@ -3,13 +3,11 @@ import db from '../config/db.js';
 
 const router = Router();
 
-// List
 router.get('/', async (req, res) => {
     const [rows] = await db.query('SELECT * FROM customer ORDER BY id_customer DESC');
     res.render('customer/index', { customers: rows });
 });
 
-// Store
 router.post('/store', async (req, res) => {
     const { nama_customer, perusahaan_cust, alamat } = req.body;
     await db.query(
@@ -19,7 +17,6 @@ router.post('/store', async (req, res) => {
     res.redirect('/customer');
 });
 
-// Update
 router.post('/update/:id', async (req, res) => {
     const { nama_customer, perusahaan_cust, alamat } = req.body;
     await db.query(
@@ -29,13 +26,11 @@ router.post('/update/:id', async (req, res) => {
     res.redirect('/customer');
 });
 
-// Delete
 router.post('/delete/:id', async (req, res) => {
     await db.query('DELETE FROM customer WHERE id_customer=?', [req.params.id]);
     res.redirect('/customer');
 });
 
-// Preview / Cetak Data Customer
 router.get('/preview/:id', async (req, res) => {
     const [rows] = await db.query('SELECT * FROM customer WHERE id_customer=?', [req.params.id]);
     const [fakturs] = await db.query(`

@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Data Customer</h4>
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Customer</button>
+        <h4 class="fw-bold">Kelola Data Customer</h4>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">Tambah Data Customer</button>
     </div>
 
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-hover">
         <thead class="table-dark">
             <tr>
                 <th width="50">No</th>
@@ -24,21 +24,19 @@
                 <td>{{ c.perusahaan_cust }}</td>
                 <td>{{ c.alamat }}</td>
                 <td>
-                    <a href="/customer/preview/{{ c.id_customer }}" class="btn btn-info btn-sm text-white">Preview</a>
-                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ c.id_customer }}">Edit</button>
-                    <form action="/customer/delete/{{ c.id_customer }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data customer ini?')">
+                    <a href="/customer/preview/{{ c.id_customer }}" class="btn btn-info btn-sm text-white">Preview / Cetak</a>
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ c.id_customer }}">Ubah</button>
+                    <form action="/customer/delete/{{ c.id_customer }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data customer?')">
                         <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                     </form>
                 </td>
             </tr>
-
-            <!-- Modal Edit -->
             <div class="modal fade" id="editModal{{ c.id_customer }}" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="/customer/update/{{ c.id_customer }}" method="POST">
                             <div class="modal-header">
-                                <h5 class="modal-title">Edit Customer</h5>
+                                <h5 class="modal-title">Ubah Data Customer</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
@@ -67,17 +65,12 @@
         </tbody>
     </table>
 
-    @if(!customers || customers.length === 0)
-        <div class="text-center text-muted py-4">Belum ada data customer.</div>
-    @endif
-
-    <!-- Modal Tambah -->
     <div class="modal fade" id="modalTambah" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="/customer/store" method="POST">
                     <div class="modal-header">
-                        <h5 class="modal-title">Tambah Customer</h5>
+                        <h5 class="modal-title">Tambah Data Customer</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">

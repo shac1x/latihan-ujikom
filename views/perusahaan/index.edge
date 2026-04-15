@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Data Perusahaan</h4>
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Perusahaan</button>
+        <h4 class="fw-bold">Kelola Data Perusahaan</h4>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">Tambah Data Perusahaan</button>
     </div>
 
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-hover">
         <thead class="table-dark">
             <tr>
                 <th width="50">No</th>
@@ -14,7 +14,7 @@
                 <th>Alamat</th>
                 <th>No. Telp</th>
                 <th width="80">Tax (%)</th>
-                <th width="180">Aksi</th>
+                <th width="150">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -26,20 +26,18 @@
                 <td>{{ item.no_telp }}</td>
                 <td>{{ item.tax }}%</td>
                 <td>
-                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ item.id_perusahaan }}">Edit</button>
-                    <form action="/perusahaan/delete/{{ item.id_perusahaan }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data perusahaan ini?')">
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ item.id_perusahaan }}">Ubah</button>
+                    <form action="/perusahaan/delete/{{ item.id_perusahaan }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data perusahaan?')">
                         <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                     </form>
                 </td>
             </tr>
-
-            <!-- Modal Edit -->
             <div class="modal fade" id="editModal{{ item.id_perusahaan }}" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <form action="/perusahaan/update/{{ item.id_perusahaan }}" method="POST">
                             <div class="modal-header">
-                                <h5 class="modal-title">Edit Perusahaan</h5>
+                                <h5 class="modal-title">Ubah Data Perusahaan</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
@@ -72,17 +70,12 @@
         </tbody>
     </table>
 
-    @if(!data || data.length === 0)
-        <div class="text-center text-muted py-4">Belum ada data perusahaan.</div>
-    @endif
-
-    <!-- Modal Tambah -->
     <div class="modal fade" id="modalTambah" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="/perusahaan/store" method="POST">
                     <div class="modal-header">
-                        <h5 class="modal-title">Tambah Perusahaan</h5>
+                        <h5 class="modal-title">Tambah Data Perusahaan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">

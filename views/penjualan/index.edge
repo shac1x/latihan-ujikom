@@ -2,15 +2,14 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Transaksi Penjualan</h4>
+        <h4 class="fw-bold">Kelola Data Penjualan</h4>
         <div>
-            <a href="/penjualan/laporan" class="btn btn-outline-secondary btn-sm">📊 Laporan</a>
-            <a href="/penjualan/tambah" class="btn btn-primary btn-sm">+ Tambah Penjualan</a>
+            <a href="/penjualan/tambah" class="btn btn-primary btn-sm">Tambah Data Penjualan</a>
         </div>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark text-center">
             <tr>
                 <th width="50">No</th>
                 <th>No. Faktur</th>
@@ -18,22 +17,22 @@
                 <th>Tanggal</th>
                 <th>Metode</th>
                 <th class="text-end">Grand Total</th>
-                <th width="260">Aksi</th>
+                <th width="240">Aksi</th>
             </tr>
         </thead>
         <tbody>
             @each((f, index) in fakturs)
             <tr>
-                <td>{{ index + 1 }}</td>
-                <td><strong>{{ f.no_faktur }}</strong></td>
+                <td class="text-center">{{ index + 1 }}</td>
+                <td class="text-center fw-bold">{{ f.no_faktur }}</td>
                 <td>{{ f.nama_customer }}</td>
-                <td>{{ f.tgl_faktur }}</td>
-                <td><span class="badge bg-secondary">{{ f.metode_bayar }}</span></td>
+                <td class="text-center">{{ f.tgl_faktur }}</td>
+                <td class="text-center">{{ f.metode_bayar }}</td>
                 <td class="text-end fw-bold">Rp {{ Number(f.grand_total).toLocaleString('id-ID') }}</td>
-                <td>
-                    <a href="/penjualan/faktur/{{ f.no_faktur }}" class="btn btn-info btn-sm text-white">Faktur</a>
-                    <a href="/penjualan/edit/{{ f.no_faktur }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="/penjualan/delete/{{ f.no_faktur }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus transaksi ini? Stok produk akan dikembalikan.')">
+                <td class="text-center">
+                    <a href="/penjualan/faktur/{{ f.no_faktur }}" class="btn btn-info btn-sm text-white">Cetak Faktur</a>
+                    <a href="/penjualan/edit/{{ f.no_faktur }}" class="btn btn-warning btn-sm">Ubah</a>
+                    <form action="/penjualan/delete/{{ f.no_faktur }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data penjualan ini?')">
                         <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                     </form>
                 </td>
@@ -41,8 +40,4 @@
             @endeach
         </tbody>
     </table>
-
-    @if(!fakturs || fakturs.length === 0)
-        <div class="text-center text-muted py-4">Belum ada data transaksi penjualan.</div>
-    @endif
 @endsection

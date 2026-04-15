@@ -3,13 +3,11 @@ import db from '../config/db.js';
 
 const router = Router();
 
-// List
 router.get('/', async (req, res) => {
     const [rows] = await db.query('SELECT * FROM produk ORDER BY id_produk DESC');
     res.render('produk/index', { produks: rows });
 });
 
-// Store
 router.post('/store', async (req, res) => {
     const { nama_produk, jenis, price, stock } = req.body;
     await db.query(
@@ -19,7 +17,6 @@ router.post('/store', async (req, res) => {
     res.redirect('/produk');
 });
 
-// Update
 router.post('/update/:id', async (req, res) => {
     const { nama_produk, jenis, price, stock } = req.body;
     await db.query(
@@ -29,10 +26,14 @@ router.post('/update/:id', async (req, res) => {
     res.redirect('/produk');
 });
 
-// Delete
 router.post('/delete/:id', async (req, res) => {
     await db.query('DELETE FROM produk WHERE id_produk=?', [req.params.id]);
     res.redirect('/produk');
+});
+
+router.get('/laporan', async (req, res) => {
+    const [rows] = await db.query('SELECT * FROM produk ORDER BY stock ASC');
+    res.render('produk/laporan', { produks: rows });
 });
 
 export default router;

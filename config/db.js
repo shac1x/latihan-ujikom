@@ -7,6 +7,6 @@ const db = mysql.createPool({
     database: "aplikasi_faktur_penjualan"
 })
 
-console.log("Koneksi database pool siap digunakan!")
+console.log("Koneksi database pool siap dipake bosku!")
 
 export default db

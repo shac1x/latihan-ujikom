@@ -2,15 +2,14 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>📊 Laporan Penjualan</h4>
+        <h4 class="fw-bold">Laporan Penjualan</h4>
         <div class="d-print-none">
-            <button class="btn btn-outline-dark btn-sm" onclick="window.print()">🖨️ Cetak Laporan</button>
-            <a href="/penjualan" class="btn btn-secondary btn-sm">← Kembali</a>
+            <button class="btn btn-dark btn-sm" onclick="window.print()">Cetak Laporan</button>
+            <a href="/penjualan" class="btn btn-secondary btn-sm">Kembali</a>
         </div>
     </div>
 
-    <!-- Filter Tanggal -->
-    <div class="card mb-4 d-print-none">
+    <div class="card border-dark mb-4 d-print-none">
         <div class="card-body">
             <form method="GET" action="/penjualan/laporan" class="row g-3 align-items-end">
                 <div class="col-md-4">
@@ -22,14 +21,13 @@
                     <input type="date" name="sampai" class="form-control" value="{{ sampai }}">
                 </div>
                 <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary">🔍 Filter</button>
+                    <button type="submit" class="btn btn-primary">Filter</button>
                     <a href="/penjualan/laporan" class="btn btn-outline-secondary">Reset</a>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Header Cetak -->
     <div class="text-center mb-4 d-none d-print-block">
         <h3 class="fw-bold">LAPORAN PENJUALAN</h3>
         @if(dari && sampai)
@@ -37,12 +35,11 @@
         @else
             <p>Seluruh Periode</p>
         @endif
-        <hr>
+        <hr style="border-top: 2px solid #000; opacity: 1;">
     </div>
 
-    <!-- Tabel Laporan -->
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
+    <table class="table table-bordered text-center">
+        <thead class="table-light">
             <tr>
                 <th width="40">No</th>
                 <th>No. Faktur</th>
@@ -51,7 +48,7 @@
                 <th>Tanggal</th>
                 <th>Metode</th>
                 <th class="text-end">PPN</th>
-                <th class="text-end">DP</th>
+                <th class="text-end">DP/Diskon</th>
                 <th class="text-end">Grand Total</th>
             </tr>
         </thead>
@@ -59,11 +56,11 @@
             @each((f, index) in fakturs)
             <tr>
                 <td>{{ index + 1 }}</td>
-                <td>{{ f.no_faktur }}</td>
+                <td class="fw-bold">{{ f.no_faktur }}</td>
                 <td>{{ f.nama_customer }}</td>
                 <td>{{ f.nama_perusahaan }}</td>
                 <td>{{ f.tgl_faktur }}</td>
-                <td><span class="badge bg-secondary">{{ f.metode_bayar }}</span></td>
+                <td>{{ f.metode_bayar }}</td>
                 <td class="text-end">Rp {{ Number(f.ppn).toLocaleString('id-ID') }}</td>
                 <td class="text-end">Rp {{ Number(f.dp).toLocaleString('id-ID') }}</td>
                 <td class="text-end fw-bold">Rp {{ Number(f.grand_total).toLocaleString('id-ID') }}</td>
@@ -71,18 +68,10 @@
             @endeach
         </tbody>
         <tfoot>
-            <tr class="table-primary">
+            <tr>
                 <th colspan="8" class="text-end fs-5">TOTAL PENJUALAN</th>
-                <th class="text-end fs-5">Rp {{ totalPenjualan.toLocaleString('id-ID') }}</th>
+                <th class="text-end fs-5 text-success">Rp {{ totalPenjualan.toLocaleString('id-ID') }}</th>
             </tr>
         </tfoot>
     </table>
-
-    @if(!fakturs || fakturs.length === 0)
-        <div class="text-center text-muted py-4">Tidak ada data penjualan untuk periode ini.</div>
-    @endif
-
-    <div class="text-muted small mt-3 text-end">
-        Dicetak pada: <script>document.write(new Date().toLocaleString('id-ID'))</script>
-    </div>
 @endsection

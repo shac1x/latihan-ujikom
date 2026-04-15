@@ -12,7 +12,6 @@ router.use('/customer', customerRouter);
 router.use('/produk', produkRouter);
 router.use('/penjualan', penjualanRouter);
 
-// Dashboard with dynamic counts
 router.get('/', async (req, res) => {
     const [[produkCount]] = await db.query('SELECT COUNT(*) as total FROM produk');
     const [[customerCount]] = await db.query('SELECT COUNT(*) as total FROM customer');

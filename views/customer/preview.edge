@@ -2,76 +2,56 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Preview Data Customer</h4>
+        <h4 class="fw-bold">Preview / Cetak Data Customer</h4>
         <div>
-            <button class="btn btn-outline-dark btn-sm d-print-none" onclick="window.print()">🖨️ Cetak</button>
-            <a href="/customer" class="btn btn-secondary btn-sm d-print-none">← Kembali</a>
+            <button class="btn btn-dark btn-sm d-print-none" onclick="window.print()">Cetak</button>
+            <a href="/customer" class="btn btn-secondary btn-sm d-print-none">Kembali</a>
         </div>
     </div>
 
-    <div class="card mb-4">
+    <div class="card border-dark mb-4">
         <div class="card-header bg-dark text-white">
             <h5 class="mb-0">Informasi Customer</h5>
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <table class="table table-borderless">
-                        <tr>
-                            <td width="150" class="fw-bold">ID Customer</td>
-                            <td>: {{ customer.id_customer }}</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Nama</td>
-                            <td>: {{ customer.nama_customer }}</td>
-                        </tr>
+                    <table class="table table-borderless table-sm">
+                        <tr><td width="150" class="fw-bold">ID Customer</td><td>: {{ customer.id_customer }}</td></tr>
+                        <tr><td class="fw-bold">Nama</td><td>: {{ customer.nama_customer }}</td></tr>
                     </table>
                 </div>
                 <div class="col-md-6">
-                    <table class="table table-borderless">
-                        <tr>
-                            <td width="150" class="fw-bold">Perusahaan</td>
-                            <td>: {{ customer.perusahaan_cust || '-' }}</td>
-                        </tr>
-                        <tr>
-                            <td class="fw-bold">Alamat</td>
-                            <td>: {{ customer.alamat || '-' }}</td>
-                        </tr>
+                    <table class="table table-borderless table-sm">
+                        <tr><td width="150" class="fw-bold">Perusahaan</td><td>: {{ customer.perusahaan_cust || '-' }}</td></tr>
+                        <tr><td class="fw-bold">Alamat</td><td>: {{ customer.alamat || '-' }}</td></tr>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <h5>Riwayat Transaksi</h5>
-    @if(fakturs && fakturs.length > 0)
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>No. Faktur</th>
-                    <th>Tanggal</th>
-                    <th>Perusahaan</th>
-                    <th>Metode Bayar</th>
-                    <th class="text-end">Grand Total</th>
-                    <th class="d-print-none" width="100">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @each(f in fakturs)
-                <tr>
-                    <td>{{ f.no_faktur }}</td>
-                    <td>{{ f.tgl_faktur }}</td>
-                    <td>{{ f.nama_perusahaan }}</td>
-                    <td><span class="badge bg-secondary">{{ f.metode_bayar }}</span></td>
-                    <td class="text-end fw-bold">Rp {{ Number(f.grand_total).toLocaleString('id-ID') }}</td>
-                    <td class="d-print-none">
-                        <a href="/penjualan/faktur/{{ f.no_faktur }}" class="btn btn-info btn-sm text-white">Faktur</a>
-                    </td>
-                </tr>
-                @endeach
-            </tbody>
-        </table>
-    @else
-        <div class="text-center text-muted py-4">Belum ada riwayat transaksi untuk customer ini.</div>
-    @endif
+    <h5 class="fw-bold">Riwayat Transaksi Pembelian</h5>
+    <table class="table table-bordered text-center">
+        <thead class="table-light">
+            <tr>
+                <th>No. Faktur</th>
+                <th>Tanggal</th>
+                <th>Perusahaan</th>
+                <th>Metode Bayar</th>
+                <th class="text-end">Grand Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @each(f in fakturs)
+            <tr>
+                <td>{{ f.no_faktur }}</td>
+                <td>{{ f.tgl_faktur }}</td>
+                <td>{{ f.nama_perusahaan }}</td>
+                <td>{{ f.metode_bayar }}</td>
+                <td class="text-end fw-bold">Rp {{ Number(f.grand_total).toLocaleString('id-ID') }}</td>
+            </tr>
+            @endeach
+        </tbody>
+    </table>
 @endsection
