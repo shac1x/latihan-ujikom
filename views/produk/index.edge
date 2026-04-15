@@ -1,0 +1,122 @@
+@layout('layouts/main')
+
+@section('content')
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Daftar Produk</h4>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Produk</button>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th width="50">No</th>
+                <th>Nama Produk</th>
+                <th>Jenis</th>
+                <th class="text-end">Harga</th>
+                <th class="text-center">Stok</th>
+                <th width="180">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @each((p, index) in produks)
+            <tr>
+                <td>{{ index + 1 }}</td>
+                <td>{{ p.nama_produk }}</td>
+                <td>{{ p.jenis }}</td>
+                <td class="text-end">Rp {{ Number(p.price).toLocaleString('id-ID') }}</td>
+                <td class="text-center">
+                    @if(p.stock <= 10)
+                        <span class="badge bg-danger">{{ p.stock }}</span>
+                    @elseif(p.stock <= 50)
+                        <span class="badge bg-warning text-dark">{{ p.stock }}</span>
+                    @else
+                        <span class="badge bg-success">{{ p.stock }}</span>
+                    @endif
+                </td>
+                <td>
+                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ p.id_produk }}">Edit</button>
+                    <form action="/produk/delete/{{ p.id_produk }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                    </form>
+                </td>
+            </tr>
+
+            <!-- Modal Edit -->
+            <div class="modal fade" id="editModal{{ p.id_produk }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="/produk/update/{{ p.id_produk }}" method="POST">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Produk</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Nama Produk</label>
+                                    <input type="text" name="nama_produk" class="form-control" value="{{ p.nama_produk }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Jenis / Satuan</label>
+                                    <input type="text" name="jenis" class="form-control" value="{{ p.jenis }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Harga</label>
+                                    <input type="number" name="price" class="form-control" step="0.01" value="{{ p.price }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Stok</label>
+                                    <input type="number" name="stock" class="form-control" value="{{ p.stock }}" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endeach
+        </tbody>
+    </table>
+
+    @if(!produks || produks.length === 0)
+        <div class="text-center text-muted py-4">Belum ada data produk.</div>
+    @endif
+
+    <!-- Modal Tambah -->
+    <div class="modal fade" id="modalTambah" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/produk/store" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tambah Produk</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Nama Produk</label>
+                            <input type="text" name="nama_produk" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jenis / Satuan</label>
+                            <input type="text" name="jenis" class="form-control" placeholder="Contoh: Tablet, Strip, Pcs">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Harga</label>
+                            <input type="number" name="price" class="form-control" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Stok</label>
+                            <input type="number" name="stock" class="form-control" value="0" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
