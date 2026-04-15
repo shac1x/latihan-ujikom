@@ -34,9 +34,9 @@ router.post('/delete/:id', async (req, res) => {
 router.get('/preview/:id', async (req, res) => {
     const [rows] = await db.query('SELECT * FROM customer WHERE id_customer=?', [req.params.id]);
     const [fakturs] = await db.query(`
-        SELECT f.*, p.nama_perusahaan 
-        FROM faktur f 
-        LEFT JOIN perusahaan p ON f.id_perusahaan = p.id_perusahaan 
+        SELECT f.*, DATE_FORMAT(f.tgl_faktur, '%Y-%m-%d') as tgl_faktur, p.nama_perusahaan
+        FROM faktur f
+                 LEFT JOIN perusahaan p ON f.id_perusahaan = p.id_perusahaan
         WHERE f.id_customer = ?
         ORDER BY f.tgl_faktur DESC
     `, [req.params.id]);

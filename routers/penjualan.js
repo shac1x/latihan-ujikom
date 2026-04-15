@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/', async (req, res) => {
     const [rows] = await db.query(`
-        SELECT f.*, c.nama_customer, p.nama_perusahaan
+        SELECT f.*, DATE_FORMAT(f.tgl_faktur, '%Y-%m-%d') as tgl_faktur, c.nama_customer, p.nama_perusahaan
         FROM faktur f
                  LEFT JOIN customer c ON f.id_customer = c.id_customer
                  LEFT JOIN perusahaan p ON f.id_perusahaan = p.id_perusahaan
@@ -103,12 +103,17 @@ router.get('/faktur/:no_faktur', async (req, res) => {
 
 router.get('/edit/:no_faktur', async (req, res) => {
     const no = req.params.no_faktur;
-    const [[faktur]] = await db.query('SELECT * FROM faktur WHERE no_faktur = ?', [no]);
+    const [[faktur]] = await db.query(`
+        SELECT *, DATE_FORMAT(tgl_faktur, '%Y-%m-%d') as tgl_faktur, DATE_FORMAT(due_date, '%Y-%m-%d') as due_date 
+        FROM faktur WHERE no_faktur = ?
+    `, [no]);
+
     const [details] = await db.query(`
         SELECT df.*, pr.nama_produk
         FROM detail_faktur df
                  JOIN produk pr ON df.id_produk = pr.id_produk
         WHERE df.no_faktur = ?`, [no]);
+
     const [perusahaans] = await db.query('SELECT * FROM perusahaan');
     const [customers] = await db.query('SELECT * FROM customer');
     const [produks] = await db.query('SELECT * FROM produk');
@@ -196,7 +201,7 @@ router.post('/delete/:no_faktur', async (req, res) => {
 router.get('/laporan', async (req, res) => {
     const { dari, sampai } = req.query;
     let query = `
-        SELECT f.*, c.nama_customer, p.nama_perusahaan
+        SELECT f.*, DATE_FORMAT(f.tgl_faktur, '%Y-%m-%d') as tgl_faktur, c.nama_customer, p.nama_perusahaan
         FROM faktur f
                  LEFT JOIN customer c ON f.id_customer = c.id_customer
                  LEFT JOIN perusahaan p ON f.id_perusahaan = p.id_perusahaan
